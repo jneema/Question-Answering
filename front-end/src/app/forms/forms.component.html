@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question-Answering App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+    <div class="container">
+        <h1>Question-Answering App</h1>
+        
+        <label for="sectionSelect">Select a Section:</label>
+        <select id="sectionSelect" [(ngModel)]="selectedSection">
+            <option value="questionAnswering">Question-Answering with Context</option>
+            <option value="gpt2">Ask a Question with GPT-2</option>
+            <option value="document">Ask a Question from a Document</option>
+        </select>
+        
+        <div *ngIf="selectedSection === 'questionAnswering'">
+            <!-- Your Question-Answering HTML here -->
+            <form (submit)="askQuestion()">
+                <div class="form-group">
+                    <label for="context">Context:</label>
+                    <textarea name="context" id="context" [(ngModel)]="context" class="form-control" rows="9" cols="60"  required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="question">Question:</label>
+                    <input type="text" id="question" name="question" [(ngModel)]="question" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Ask Question</button>
+            </form>
+            <div *ngIf="answer">
+                <h2>Answer:</h2>
+                <p>{{ answer }}</p>
+            </div>
+        </div>
+
+        <div *ngIf="selectedSection === 'gpt2'">
+            <!-- Your GPT-2 section HTML here -->
+            <h2>Ask a Question with GPT-2</h2>
+            <div class="form-group">
+                <label for="gpt2-question">Enter your question:</label>
+                <input type="text" id="gpt2-question" name="gpt2-question" [(ngModel)]="gpt2Question" class="form-control" required>
+            </div>
+            <button (click)="askGpt2Question()" class="btn btn-primary">Generate GPT-2 Text</button>
+            <div *ngIf="gpt2Answer">
+                <h3>Generated Text:</h3>
+                <p>{{ gpt2Answer }}</p>
+            </div>
+        </div>
+
+        <div *ngIf="selectedSection === 'document'">
+            <!-- Your Document section HTML here -->
+            <form (ngSubmit)="submitForm()" #questionForm="ngForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" name="file" accept=".pdf" (change)="onFileSelected($event)" />
+                </div>
+                <div class="form-group">
+                    <label for="Question">Question:</label>
+                    <input type="text" id="Question" name="Question" [(ngModel)]="Question" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Ask Question</button>
+            </form>
+            <div *ngIf="Answer">
+                <p>{{ Answer }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
